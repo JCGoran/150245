@@ -864,7 +864,7 @@ proc convwire () { local x,y,z,ii,jj,a,del,prid,prty,poid,poty,cv,cvt,dv,dvt,lse
   col=$o1 ce=col.ce
   if (numarg()>1) lseed=$2 else lseed=1234
   vrsz(1e4,vidx,vdel,vdist,vtmp)
-  {rdm=new Random() rdm.MCellRan4(lseed,lseed)}
+  {rdm=new Random() rdm.Random123(lseed,lseed)}
   // Create the connectivity NQS table.
   nqsdel(col.connsnq)
   col.connsnq=new NQS("id1","id2","del","dist","wt1","wt2")

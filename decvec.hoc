@@ -49,7 +49,7 @@ vrtmp = new Vector(10)
 veclist = new List()
 veccollect = new List()
 rdm = new Random()
-rdm.MCellRan4()
+rdm.Random123()
 
 if (!(xwindows && name_declared("xwindows"))) {
   xwindows=0

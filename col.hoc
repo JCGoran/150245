@@ -170,7 +170,7 @@ proc initrands () { local i,se localobj rds
   for i=0,vrse.size-1 {
     rds = rsl.o(i)       // go thru Random objects 
     se = vrse.x(i)       // seed previously used
-    rds.MCellRan4(se,se) // initialize MCellRan4 Random # generator
+    rds.Random123(se,se) // initialize random # generator
     rds.negexp(1)        // must be called this way 
   }
 }
@@ -195,9 +195,10 @@ proc nsstim () { local a,sy,sdx,idx,sglo,sghi,hzlo,hzhi,ct,se localobj rdm,vsy,v
         ns.noise = 1 // make it fully random
         ns.interval = 1e3 / vhz.x(idx-col.ix[ct]) // avg interval btwn the inputs
 
-        rsl.append( rds = new Random() )
+        rds = new Random()
+        rds.Random123(se,se)  // seeds are in order, shouldn't matter
+        rsl.append( rds)
         rds.negexp(1) // set random # generator using negexp(1) - avg interval in NetStim.interval
-        rds.MCellRan4(se,se)  // seeds are in order, shouldn't matter
         // ns.noiseFromRandom(rds) // use random # generator for this NetStim
         ns.noiseFromRandom123(se, se, 0) // compatible back to 2016
         vrse.append(se) // save random # seed
@@ -653,7 +654,7 @@ proc wire () { local x,y,z,ii,jj,a,del,prid,prty,poty,dv,dvt,lseed,dvrand,szo\
   if (argtype(1)==0) lseed=$1 else lseed=1234
   vrsz(1e4,vidx,vdel,vdist,vtmp)
   vrsz(ce.count*CTYPi,vdvd)
-  {rdm=new Random() rdm.MCellRan4(lseed,lseed)}
+  {rdm=new Random() rdm.Random123(lseed,lseed)}
   if(dgcor){dvrand=0.2 rdm.uniform(.8,1.2) vdvd.setrand(rdm)}// div variability of 20% when dgcor==1
   rdmDV=initdivrnd(lseed)//initialize random # generator for use when dgcor==0
   // Create the connectivity NQS table.
@@ -704,7 +705,7 @@ func wire2col () { local d,from,to,sz,dvm,dv,pij,dlym,dlyd,w1,w2,sy1,sy2,loc,i,i
   {vpij=nq.getcol("pij") vloc=nq.getcol("loc")}
   if(verbose) print "tcol.wseed = ",tcol.wseed, " vfrom.size = ",vfrom.size
   rdmDV=initdivrnd(tcol.wseed)//initialize random # generator
-  {rdm=new Random() rdm.MCellRan4(tcol.wseed,tcol.wseed)}
+  {rdm=new Random() rdm.Random123(tcol.wseed,tcol.wseed)}
   if (mknetnqss && xcolconnsnq==nil) xcolconnsnq=new NQS("id1","col2","id2","del","wt1","wt2")
   i=0
   while(i<vfrom.size) {
